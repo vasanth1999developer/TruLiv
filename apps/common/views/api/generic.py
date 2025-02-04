@@ -108,7 +108,7 @@ class AppModelRetrieveAPIViewSet(
     def retrieve(self, request, *args, **kwargs):
         """Overriden to include logs."""
 
-        model_name = self.get_object().__class__.__name__
+        # model_name = self.get_object().__class__.__name__
         # logger.debug(f"Retrieving a {model_name} object with id: {kwargs['pk']} by {self.get_user()}")
         return super().retrieve(request, *args, **kwargs)
 
@@ -152,8 +152,8 @@ class AppModelCUDAPIViewSet(
     def create(self, request, *args, **kwargs):
         """Overriden to include logs."""
 
-        model_name = self.get_serializer_class().Meta.model.__name__
-        # logger.debug(f"Creating a {model_name} object with data: {request.data} by {str(self.get_user().phone_number)}")
+        # model_name = self.get_serializer_class().Meta.model.__name__
+        # logger.debug(f"Creating a {model_name} object with data: {request.data} )
         return super().create(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):

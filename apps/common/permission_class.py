@@ -9,9 +9,8 @@ class RoleBasedPermission(BasePermission):
     allowed_roles = []
 
     def has_permission(self, request, view):
-        """This is used to get the role from the request User"""    
+        """This is used to get the role from the request User"""
         # breakpoint()
         user_role = getattr(request.user, "role", None)
         allowed_roles = getattr(view, "allowed_roles", [])
         return user_role in allowed_roles
-

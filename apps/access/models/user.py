@@ -1,9 +1,14 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 
 from apps.common.managers import UserManager
 from apps.common.model_fields import AppPhoneNumberField
-from apps.common.models.base import COMMON_BLANK_AND_NULLABLE_FIELD_CONFIG, COMMON_CHAR_FIELD_MAX_LENGTH, BaseArchivableModel, BaseCreationModel
+from apps.common.models.base import (
+    COMMON_BLANK_AND_NULLABLE_FIELD_CONFIG,
+    COMMON_CHAR_FIELD_MAX_LENGTH,
+    BaseArchivableModel,
+    BaseCreationModel,
+)
 from apps.properties.choices import GenderChoices, RoleTypeChoices
 
 
@@ -14,7 +19,7 @@ class User(AbstractUser, BaseArchivableModel):
     ********************************  Model Fields ********************************
     pk                  - id
     uuid                - uuid
-    charField           -  first_name, last_name, 
+    charField           -  first_name, last_name,
     DateTimeField       - created_at, modified_at, last_login, date_joined, deleted_at
     EmailField          - email
     PhoneNumberField    - phone_number
@@ -44,5 +49,6 @@ class User(AbstractUser, BaseArchivableModel):
     USERNAME_FIELD = "phone_number"
     REQUIRED_FIELDS = []
     objects = UserManager()
+
     class Meta(BaseCreationModel.Meta):
         default_related_name = "related_users"

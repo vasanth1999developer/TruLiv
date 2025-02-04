@@ -13,8 +13,7 @@ router.register(f"{V1_API_URL_PREFIX}/user-registration", UserCreateAPIView, bas
 
 urlpatterns = [
     # ----------------------------- Authentication API's --------------------------------
-    
     path(f"{V1_API_URL_PREFIX}/login/", LoginOTPView.as_view()),
-    path(f"{V1_API_URL_PREFIX}/otp-validation/", ValidateOTPView.as_view()),   
-        path(f"{V1_API_URL_PREFIX}/logout/", LogoutUserAPIView.as_view()),
+    path(f"{V1_API_URL_PREFIX}/otp-validation/", ValidateOTPView.as_view()),
+    path(f"{V1_API_URL_PREFIX}/logout/", LogoutUserAPIView.as_view()),
 ] + router.urls

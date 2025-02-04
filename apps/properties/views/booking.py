@@ -1,28 +1,27 @@
 import razorpay
 from django.conf import settings
-from rest_framework import  status
-from rest_framework.response import Response
 from django.db import transaction
+from rest_framework import status
+
 from apps.common.permission_class import RoleBasedPermission
 from apps.common.views.api.generic import AppModelCUDAPIViewSet
 from apps.properties.choices import RoleTypeChoices
 from apps.properties.models.booking import Booking, Payment
 from apps.properties.serializers.booking import BookingSerializer
-from razorpay.errors import BadRequestError
+
 
 class CreateRazorpayOrderView(AppModelCUDAPIViewSet):
     """Create a new Razor Pay Order view"""
-    
- 
+
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
     permission_classes = [RoleBasedPermission]
-    allowed_roles = [RoleTypeChoices.guest]      
-    
+    allowed_roles = [RoleTypeChoices.guest]
+
     @transaction.atomic
     def create(self, request, *args, **kwargs):
-        """Override the create method for booking"""   
-            
+        """Override the create method for booking"""
+
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             user = self.get_user()
@@ -31,17 +30,13 @@ class CreateRazorpayOrderView(AppModelCUDAPIViewSet):
             joining_date = serializer.validated_data["joining_date"]
             amount = serializer.validated_data["amount"]
             booking = Booking.objects.create(
-                user=user,
-                property=property_id,
-                room_type=room_type_id,
-                joining_date=joining_date,
-                status="pending"
+                user=user, property=property_id, room_type=room_type_id, joining_date=joining_date, status="pending"
             )
             client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_SECRET_KEY))
             try:
                 razorpay_order = client.order.create(
                     {
-                        "amount": int(amount * 100), 
+                        "amount": int(amount * 100),
                         "currency": "INR",
                         "receipt": f"order_rcptid_{booking.id}",
                         "notes": {"booking_id": booking.id, "user_id": user.id},
@@ -65,7 +60,11 @@ class CreateRazorpayOrderView(AppModelCUDAPIViewSet):
                         },
                         "notify": {"sms": True, "email": True},
                         "reminder_enable": True,
-                        "notes": {"booking_id": booking.id, "user_id": user.id, "razorpay_order_id": razorpay_order["id"],},
+                        "notes": {
+                            "booking_id": booking.id,
+                            "user_id": user.id,
+                            "razorpay_order_id": razorpay_order["id"],
+                        },
                     }
                 )
                 if not payment_link:
@@ -95,5 +94,3 @@ class CreateRazorpayOrderView(AppModelCUDAPIViewSet):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
         return self.send_error_response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-

@@ -7,12 +7,13 @@ import secrets
 import string
 import time
 import typing
-from django.core.cache import cache
+
 from dateutil import tz
 from django.conf import settings
+from django.core.cache import cache
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.db import connection
 from requests import request
-from django.core.cache.backends.base import DEFAULT_TIMEOUT
 
 logger = logging.getLogger(__name__)
 
@@ -214,15 +215,15 @@ def get_user_session_agent(request) -> str:
 
 
 def haversine(self, lat1, lon1, lat2, lon2):
-    """Formula for find the nearest place to the given formula"""       
-               
+    """Formula for find the nearest place to the given formula"""
+
     lat1, lon1, lat2, lon2 = map(math.radians, [lat1, lon1, lat2, lon2])
     dlat = lat2 - lat1
     dlon = lon2 - lon1
-    a = math.sin(dlat / 2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2)**2
+    a = math.sin(dlat / 2) ** 2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2) ** 2
     c = 2 * math.asin(math.sqrt(a))
-    r = 6371  
-    return c * r    
+    r = 6371
+    return c * r
 
 
 def generate_otp(phone_number, length=6, expiry=None):

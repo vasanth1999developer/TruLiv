@@ -105,7 +105,11 @@ DATABASES = {
 ADMIN_URL = env.str("DJANGO_ADMIN_URL", default="django-admin/")
 ADMINS = [("""Jeevan""", "jeevan.jeevu94@gmail.com")]
 MANAGERS = ADMINS
-CSRF_TRUSTED_ORIGINS = ["https://*.techademyb2b.site/", "https://*.127.0.0.1", "https://8a31-106-219-183-125.ngrok-free.app",]
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.techademyb2b.site/",
+    "https://*.127.0.0.1",
+    "https://8a31-106-219-183-125.ngrok-free.app",
+]
 
 # App Super Admin
 # ------------------------------------------------------------------------------
@@ -188,13 +192,13 @@ else:
             "BACKEND": "apps.common.storages.MediaRootAzureStorage",
         },
     }
-MEDIA_URL = f"https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/media/"
+MEDIA_URL = f"https: //{AZURE_ACCOUNT_NAME}.blob.core.windows.net/media/"
 MEDIA_ROOT = str(APPS_DIR / "media")
 TEMP_ROOT = f"{MEDIA_ROOT}/temp"
 
 # AUTHENTICATION
 # ------------------------------------------------------------------------------
-AUTH_USER_MODEL = "access.User" # custom app user model
+AUTH_USER_MODEL = "access.User"  # custom app user model
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
@@ -223,7 +227,11 @@ X_FRAME_OPTIONS = "DENY"
 # ------------------------------------------------------------------------------
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_HEADERS = [*default_headers, "domain", "idp-token",]
+CORS_ALLOW_HEADERS = [
+    *default_headers,
+    "domain",
+    "idp-token",
+]
 
 # Api & Rest Framework
 # ------------------------------------------------------------------------------
@@ -390,9 +398,6 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 TWILIO_CONFIG = {
     "account_sid": env.str("TWILIO_ACCOUNT_SID"),
     "auth_token": env.str("TWILIO_AUTH_TOKEN"),
-    "whatsapp_number": env.str("TWILIO_WHATSAPP_NUMBER"),  
-    "phone_number": env.str("TWILIO_PHONE_NUMBER"),    
+    "whatsapp_number": env.str("TWILIO_WHATSAPP_NUMBER"),
+    "phone_number": env.str("TWILIO_PHONE_NUMBER"),
 }
-
-
-

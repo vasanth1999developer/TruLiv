@@ -27,7 +27,7 @@ class LoginOTPView(NonAuthenticatedAPIMixin, AppAPIView):
                 return self.send_error_response(f"Failed to send OTP: {error_message}")
         return self.send_error_response("Please enter your phone number")
 
-        
+
 class ValidateOTPView(NonAuthenticatedAPIMixin, AppAPIView):
     """Validate provided OTP and phone_number and return authorization token."""
 
@@ -41,22 +41,19 @@ class ValidateOTPView(NonAuthenticatedAPIMixin, AppAPIView):
         if validate_otp(phone_number, otp):
             try:
                 user = User.objects.get(phone_number=f"+91{phone_number}")
-                if user:      
+                if user:
                     token, _ = Token.objects.get_or_create(user=user)
-                    return self.send_response(
-                        data={"token": token.key} 
-                    )
+                    return self.send_response(data={"token": token.key})
                 else:
-                    return self.send_response(
-                    )
+                    return self.send_response()
             except Exception:
                 return self.send_response("OTP Verified Successfully.")
-        return self.send_error_response("Invalid OTP")      
-    
-    
+        return self.send_error_response("Invalid OTP")
+
+
 class LogoutUserAPIView(AppAPIView):
     """Invalidate a token of current session and logout user."""
-    
+
     def post(self, *args, **kwargs):
         """Handle on post."""
 
@@ -65,4 +62,4 @@ class LogoutUserAPIView(AppAPIView):
             user.auth_token.delete()
             return self.send_response()
         except Exception:
-            return self.send_error_response()      
+            return self.send_error_response()

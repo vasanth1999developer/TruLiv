@@ -1,7 +1,8 @@
+from django.contrib.auth.models import BaseUserManager
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist, ValidationError
 from django.db.models import QuerySet
 from django.utils import timezone
-from django.contrib.auth.models import BaseUserManager
+
 
 class BaseObjectManagerQuerySet(QuerySet):
     """
@@ -157,13 +158,11 @@ class ArchivableObjectManagerQuerySet(SoftDeleteObjectManagerQuerySet):
         """
 
         return super().update(is_deleted=True, is_active=False, deleted_at=timezone.now())
-    
-    
-    
-    
+
+
 class UserManager(BaseUserManager):
-    """Define a model manager for User model with no username field."""     
-      
+    """Define a model manager for User model with no username field."""
+
     def create_user(self, email, password, **kwargs):
         """
         Creates and saves a User with the given email, date of

@@ -17,7 +17,7 @@ app = Celery("config")
 app.config_from_object("django.conf:settings", namespace="CELERY")
 
 # Load task modules from all registered Django app configs.
-app.autodiscover_tasks(['apps.common.task'])
+app.autodiscover_tasks(["apps.common.task"])
 
 # Register class based tasks are not auto registered by default.
 # Ref: https://github.com/celery/celery/issues/5992#issuecomment-781857785

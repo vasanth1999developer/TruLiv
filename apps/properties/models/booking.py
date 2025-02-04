@@ -1,6 +1,4 @@
-
 from django.db import models
-
 
 from apps.access.models.user import User
 from apps.common.models.base import COMMON_BLANK_AND_NULLABLE_FIELD_CONFIG, COMMON_CHAR_FIELD_MAX_LENGTH, BaseModel
@@ -20,18 +18,21 @@ class Booking(BaseModel):
     CharField           - status (choices: pending, confirmed, cancelled)
     DateTimeField       - created_at, modified_at
     """
-    
+
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
     property = models.ForeignKey(to=Property, on_delete=models.CASCADE)
     room_type = models.ForeignKey(to=RoomType, on_delete=models.CASCADE)
     joining_date = models.DateField()
-    status = models.CharField(max_length=COMMON_CHAR_FIELD_MAX_LENGTH,choices=BookingStatusChoices.choices,default=BookingStatusChoices.pending)
+    status = models.CharField(
+        max_length=COMMON_CHAR_FIELD_MAX_LENGTH,
+        choices=BookingStatusChoices.choices,
+        default=BookingStatusChoices.pending,
+    )
     bed = models.ForeignKey(Bed, **COMMON_BLANK_AND_NULLABLE_FIELD_CONFIG, on_delete=models.SET_NULL)
- 
+
     class Meta(BaseModel.Meta):
         default_related_name = "related_bookings"
- 
- 
+
 
 class Payment(BaseModel):
     """
@@ -45,15 +46,20 @@ class Payment(BaseModel):
     BooleanField            - is_paid (default: False)
     DateTimeField           - created_at, modified_at
     """
-    
+
     booking = models.OneToOneField(to=Booking, on_delete=models.CASCADE, related_name="payment")
     razorpay_order_id = models.CharField(max_length=COMMON_CHAR_FIELD_MAX_LENGTH, unique=True)
-    razorpay_payment_id = models.CharField(max_length=COMMON_CHAR_FIELD_MAX_LENGTH, **COMMON_BLANK_AND_NULLABLE_FIELD_CONFIG)
-    razorpay_signature = models.CharField(max_length=COMMON_CHAR_FIELD_MAX_LENGTH, **COMMON_BLANK_AND_NULLABLE_FIELD_CONFIG)
-    razorpay_payment_link_order_id =  models.CharField(max_length=COMMON_CHAR_FIELD_MAX_LENGTH, **COMMON_BLANK_AND_NULLABLE_FIELD_CONFIG)
+    razorpay_payment_id = models.CharField(
+        max_length=COMMON_CHAR_FIELD_MAX_LENGTH, **COMMON_BLANK_AND_NULLABLE_FIELD_CONFIG
+    )
+    razorpay_signature = models.CharField(
+        max_length=COMMON_CHAR_FIELD_MAX_LENGTH, **COMMON_BLANK_AND_NULLABLE_FIELD_CONFIG
+    )
+    razorpay_payment_link_order_id = models.CharField(
+        max_length=COMMON_CHAR_FIELD_MAX_LENGTH, **COMMON_BLANK_AND_NULLABLE_FIELD_CONFIG
+    )
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     is_paid = models.BooleanField(default=False)
 
     class Meta(BaseModel.Meta):
         default_related_name = "related_payments"
-
