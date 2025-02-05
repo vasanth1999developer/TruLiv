@@ -214,18 +214,6 @@ def get_user_session_agent(request) -> str:
     return user_session_agent
 
 
-def haversine(self, lat1, lon1, lat2, lon2):
-    """Formula for find the nearest place to the given formula"""
-
-    lat1, lon1, lat2, lon2 = map(math.radians, [lat1, lon1, lat2, lon2])
-    dlat = lat2 - lat1
-    dlon = lon2 - lon1
-    a = math.sin(dlat / 2) ** 2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2) ** 2
-    c = 2 * math.asin(math.sqrt(a))
-    r = 6371
-    return c * r
-
-
 def generate_otp(phone_number, length=6, expiry=None):
     """Generates OTP for a User."""
 
@@ -244,3 +232,15 @@ def validate_otp(phone_number, otp):
         cache.delete(phone_number)
         return True
     return True
+
+
+def haversine(lat1, lon1, lat2, lon2):
+    """Formula for find the nearest place to the given latitude and longitude"""
+
+    lat1, lon1, lat2, lon2 = map(math.radians, [lat1, lon1, lat2, lon2])
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+    a = math.sin(dlat / 2) ** 2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2) ** 2
+    c = 2 * math.asin(math.sqrt(a))
+    r = 6371
+    return c * r

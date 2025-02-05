@@ -1,5 +1,4 @@
-import math
-
+from apps.common.helpers import haversine
 from apps.common.permission_class import RoleBasedPermission
 from apps.common.task import send_sms
 from apps.common.views.api.base import AppAPIView, NonAuthenticatedAPIMixin
@@ -146,17 +145,6 @@ class NearbyPropertiesView(AppAPIView):
     permission_classes = [RoleBasedPermission]
     allowed_roles = [RoleTypeChoices.guest, RoleTypeChoices.admin]
 
-    def haversine(self, lat1, lon1, lat2, lon2):
-        """Formula for find the nearest place to the given latitude and longitude"""
-
-        lat1, lon1, lat2, lon2 = map(math.radians, [lat1, lon1, lat2, lon2])
-        dlat = lat2 - lat1
-        dlon = lon2 - lon1
-        a = math.sin(dlat / 2) ** 2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2) ** 2
-        c = 2 * math.asin(math.sqrt(a))
-        r = 6371
-        return c * r
-
     def get(self, request, *args, **kwargs):
         """Override this method to get the nearby properties of current location"""
 
@@ -171,12 +159,10 @@ class NearbyPropertiesView(AppAPIView):
                 "id": place.id,
                 "name": place.name,
                 "location": place.location,
-                "distance_km": round(
-                    self.haversine(latitude, longitude, float(place.latitude), float(place.longitude)), 2
-                ),
+                "distance_km": round(haversine(latitude, longitude, float(place.latitude), float(place.longitude)), 2),
             }
             for place in properties
-            if self.haversine(latitude, longitude, float(place.latitude), float(place.longitude)) <= radius
+            if haversine(latitude, longitude, float(place.latitude), float(place.longitude)) <= radius
         ]
         filtered_places = [place for place in nearby_places if place["distance_km"] > 0.0]
         sorted_places = sorted(filtered_places, key=lambda x: x["distance_km"])
