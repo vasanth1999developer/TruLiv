@@ -34,3 +34,12 @@ class RoleTypeChoices(DjangoChoices):
     guest = ChoiceItem("guest", "Guest")
     customer = ChoiceItem("customer", "Customer")
     admin = ChoiceItem("admin", "Admin")
+
+
+class StatusChoices(DjangoChoices):
+    """Choices for payment status."""
+
+    pending = ChoiceItem("pending", "Pending")
+    paid = ChoiceItem("paid", "Paid")
+    overdue = ChoiceItem("overdue", "Overdue")
+    failed = ChoiceItem("failed", "Failed")

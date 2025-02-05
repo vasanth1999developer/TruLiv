@@ -2,7 +2,7 @@ from django.db import models
 
 from apps.access.models.user import User
 from apps.common.models.base import COMMON_BLANK_AND_NULLABLE_FIELD_CONFIG, COMMON_CHAR_FIELD_MAX_LENGTH, BaseModel
-from apps.properties.choices import BookingStatusChoices
+from apps.properties.choices import BookingStatusChoices, StatusChoices
 from apps.properties.models.properties import Bed, Property, RoomType
 
 
@@ -63,3 +63,35 @@ class Payment(BaseModel):
 
     class Meta(BaseModel.Meta):
         default_related_name = "related_payments"
+
+
+class RentalPayment(models.Model):
+    """
+    Payment model for the application...
+
+    ********************************  Model Fields ********************************
+    pk                      - id
+    Fk                      - booking (OneToOne)
+    CharField               - razorpay_order_id (unique), razorpay_payment_id, razorpay_signature
+    DecimalField            - amount
+    BooleanField            - is_paid (default: False)
+    DateTimeField           - created_at, modified_at
+    """
+
+    booking = models.ForeignKey("Booking", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    property = models.ForeignKey("Property", on_delete=models.CASCADE)
+    room_type = models.ForeignKey("PropertyRoomType", on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    daily_rent = models.DecimalField(max_digits=10, decimal_places=2)
+    days_charged = models.IntegerField()
+    due_date = models.DateField()
+    status = models.CharField(max_length=20, choices=StatusChoices.choices, default=StatusChoices.pending)
+    payment_link = models.URLField(blank=True, null=True)
+    transaction_id = models.CharField(max_length=100, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    payment_date = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.user.username} - ₹{self.amount} - {self.status}"
