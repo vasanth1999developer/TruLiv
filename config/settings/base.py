@@ -56,6 +56,8 @@ THIRD_PARTY_APPS = [
     "phonenumber_field",
     # sendgrid email
     "anymail",
+    "rest_framework_swagger",
+    "drf_yasg",
 ]
 
 CUSTOM_APPS = [
@@ -401,3 +403,6 @@ TWILIO_CONFIG = {
     "whatsapp_number": env.str("TWILIO_WHATSAPP_NUMBER"),
     "phone_number": env.str("TWILIO_PHONE_NUMBER"),
 }
+
+
+SWAGGER_SETTINGS = {"SECURITY_DEFINITIONS": {"Basic": {"type": "basic"}}}

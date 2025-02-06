@@ -91,7 +91,9 @@ class RentalPayment(BaseModel):
         max_length=COMMON_CHAR_FIELD_MAX_LENGTH, choices=StatusChoices.choices, default=StatusChoices.pending
     )
     payment_link = models.URLField(**COMMON_BLANK_AND_NULLABLE_FIELD_CONFIG)
-    transaction_id = models.CharField(max_length=COMMON_CHAR_FIELD_MAX_LENGTH, **COMMON_BLANK_AND_NULLABLE_FIELD_CONFIG)
+    transaction_id = models.CharField(
+        max_length=COMMON_CHAR_FIELD_MAX_LENGTH, **COMMON_BLANK_AND_NULLABLE_FIELD_CONFIG
+    )
     updated_at = models.DateTimeField(auto_now=True)
     payment_date = models.DateTimeField(**COMMON_BLANK_AND_NULLABLE_FIELD_CONFIG)
 

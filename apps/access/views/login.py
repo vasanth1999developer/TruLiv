@@ -36,7 +36,7 @@ class ValidateOTPView(NonAuthenticatedAPIMixin, AppAPIView):
     """Validate provided OTP and phone_number and return authorization token."""
 
     def post(self, request):
-        """Handle on POST"""
+        """Handle OTP validation on POST request"""
 
         phone_number = self.get_request().data.get("phone_number")
         otp = self.get_request().data.get("otp")

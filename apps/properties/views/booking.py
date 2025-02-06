@@ -34,10 +34,9 @@ class CreateRazorpayOrderView(AppModelCUDAPIViewSet):
             )
             client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_SECRET_KEY))
             try:
-                
                 # This will create a order in razorpay this API is provided by the RAZORPAY
-                # Once the order was created it will be saved in the Paymentlink 
-                
+                # Once the order was created it will be saved in the Paymentlink
+
                 razorpay_order = client.order.create(
                     {
                         "amount": int(amount * 100),
@@ -52,12 +51,12 @@ class CreateRazorpayOrderView(AppModelCUDAPIViewSet):
                         status=status.HTTP_400_BAD_REQUEST,
                     )
                 ser_phone_number = str(user.phone_number)
-                
+
                 # Generate the payment link for the order
                 # The user will be able to pay the booking amount by clicking on the payment link.
                 # The payment details will be saved in the Payment table.
                 # Once payment is done It will call the WEBHOOK
-                
+
                 payment_link = client.payment_link.create(
                     {
                         "amount": int(amount * 100),
