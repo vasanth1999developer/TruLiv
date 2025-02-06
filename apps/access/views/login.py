@@ -38,19 +38,16 @@ class ValidateOTPView(NonAuthenticatedAPIMixin, AppAPIView):
     def post(self, request):
         """Handle OTP validation on POST request"""
 
-        phone_number = self.get_request().data.get("phone_number")
-        otp = self.get_request().data.get("otp")
+        phone_number = request.data.get("phone_number")
+        otp = request.data.get("otp")
         if not phone_number or not otp:
-            return self.send_error_response()
+            return self.send_error_response("Phone number and OTP are required.")
         if validate_otp(phone_number, otp):
             try:
                 user = User.objects.get(phone_number=f"+91{phone_number}")
-                if user:
-                    token, _ = Token.objects.get_or_create(user=user)
-                    return self.send_response(data={"token": token.key})
-                else:
-                    return self.send_response()
-            except Exception:
+                token, _ = Token.objects.get_or_create(user=user)
+                return self.send_response(data={"token": token.key})
+            except User.DoesNotExist:
                 return self.send_response("OTP Verified Successfully.")
         return self.send_error_response("Invalid OTP")
 
